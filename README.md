@@ -64,13 +64,13 @@ Both are described in the next section.
 
 ### Mapping solidity <-> go
 
+#### Variables
+
 Reference go code:
 
 [REF_CODE_VK](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/setup.go#L55)
 
 [REF_CODE_PROOF](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/prove.go#L46)
-
-#### Variables
 
 Verification key:
 ```
