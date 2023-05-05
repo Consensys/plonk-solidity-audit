@@ -59,11 +59,112 @@ Our plonk gates look like this `QₗL + QᵣR + QₘLR + QₒO + Qₖ + ∑ᵢQc
 The differences of our verification algorithm from the original paper are:
 * the computation of the public inputs
 * the computation of the linearised polynomial
+
 Both are described in the next section.
 
 ### Mapping solidity <-> go
+
+[REF_CODE_VK](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/setup.go#L55)
+[REF_CODE_PROOF](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/prove.go#L46)
+
+#### Variables
+
+Verification key:
+```
+// correspond to Ql, Qr, Qm, Qo, Qk, Qcp kzg.Digest in REF_CODE_VK
+uint256 constant vk_ql_com_x
+uint256 constant vk_ql_com_y
+uint256 constant vk_qr_com_x
+uint256 constant vk_qr_com_y
+uint256 constant vk_qm_com_x
+uint256 constant vk_qm_com_y
+uint256 constant vk_qo_com_x
+uint256 constant vk_qo_com_y
+uint256 constant vk_qk_com_x
+uint256 constant vk_qk_com_y
+
+// corresponds to S[3]kzg.Digest in REF_CODE_VK
+uint256 constant vk_s1_com_x
+uint256 constant vk_s1_com_y
+uint256 constant vk_s2_com_x
+uint256 constant vk_s2_com_y
+uint256 constant vk_s3_com_x
+uint256 constant vk_s3_com_y
+
+// corresponds to Kzg.G2 in REF_CODE_VK
+uint256 constant g2_srs_0_x_0
+uint256 constant g2_srs_0_x_1
+uint256 constant g2_srs_0_y_0
+uint256 constant g2_srs_0_y_1
+uint256 constant g2_srs_1_x_0
+uint256 constant g2_srs_1_x_1
+uint256 constant g2_srs_1_y_0
+uint256 constant g2_srs_1_y_1
+
+// corresponds to Siz,SizeInv,Generator in REF_CODE_VK
+uint256 constant vk_domain_size
+uint256 constant vk_inv_domain_size
+uint256 constant vk_omega
+
+// corresponds to  Qcp in REF_CODE_VK
+uint256 constant vk_selector_commitments_commit_api_0_x
+uint256 constant vk_selector_commitments_commit_api_0_y
+
+// loads the slice corresponding to load_vk_commitments_indices_commit_api in REF_CODE_VK
+load_vk_commitments_indices_commit_api
+```
+
+Proving key (the following are offset to the proof, which is just a stream of bytes):
+```
+// corresponds to the entries of LRO (in that order) in REF_CODE_PROOF
+uint256 constant proof_l_com_x
+uint256 constant proof_l_com_y
+uint256 constant proof_r_com_x
+uint256 constant proof_r_com_y
+uint256 constant proof_o_com_x
+uint256 constant proof_o_com_y
+
+// corresponds to the entries of H in REF_CODE_PROOF
+uint256 constant proof_h_0_x
+uint256 constant proof_h_0_y
+uint256 constant proof_h_1_x
+uint256 constant proof_h_1_y
+uint256 constant proof_h_2_x
+uint256 constant proof_h_2_y
+
+// corresponds to BatchedProof.ClaimedValues[2:7] in REF_CODE_PROOF
+uint256 constant proof_l_at_zeta
+uint256 constant proof_r_at_zeta
+uint256 constant proof_o_at_zeta
+uint256 constant proof_s1_at_zeta
+uint256 constant proof_s2_at_zeta
+
+// corresponds to Z in REF_CODE_PROOF
+uint256 constant proof_grand_product_commitment_x
+uint256 constant proof_grand_product_commitment_y
+
+// corresponds to ZShiftedOpening.ClaimedValue in RED_CODE_PROOF
+uint256 constant proof_grand_product_at_zeta_omega
+
+// corresponds to BatchedProof.ClaimedValues[0:2] in REF_CODE_PROOF
+uint256 constant proof_quotient_polynomial_at_zeta
+uint256 constant proof_linearised_polynomial_at_zeta
+
+// corresponds to BatchedProof.H in REF_CODE_PROOF
+uint256 constant proof_batch_opening_at_zeta_x
+uint256 constant proof_batch_opening_at_zeta_y 
+
+// corresponds to ZShiftedOpening.H in REF_CODE_PROOF
+uint256 constant proof_opening_at_zeta_omega_x
+uint256 constant proof_opening_at_zeta_omega_y
+
+```
+
+#### Functions
 
 * `derive_gamma_beta_alpha_zeta` : corresponds to l.48 to l.80 of [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L92).
 
 * `compute_pi` : corresponds to l.92 to l.135 of [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L92). We actually compute 
 `∑_{i<n} pi_{i}Lᵢ{ζ}`, with `Lᵢ(ζ) = ωⁱ/n(ζⁿ-1)/(ζ-ωⁱ)` in a first step.  Then we add to this sum `∑ᵢL_{i∈ I}Hash(Pi_{i})`. `I` here is a set of indices (obtained with `load_vk_commitments_indices_commit_api`) corresponding to the position of new public inputs derived from hashing commitments contained in `add(proof, (mul(openings_selector_commits,0x20)))`. The hash function that is used is described [here](https://tools.ietf.org/html/draft-irtf-cfrg-hash-to-curve-06#section-5.2), with the output size hardcoded to 1 and the string hardcoded to "BSB22-Plonk". The hash function is in `contracts/Utils.sol` (the go counterpart is in [gnark-crypto](https://github.com/ConsenSys/gnark-crypto/blob/master/ecc/bn254/fr/element.go#L744)).
+
+* `compute_alpha_square_lagrange` computes `α²1/n(ζⁿ-1)/(ζ-1)` and stores it in the state (the value is reused several times)
