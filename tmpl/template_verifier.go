@@ -467,7 +467,7 @@ library PlonkVerifier {
       mstore(add(mem, state_beta), beta)
       mstore(add(mem, state_pi), pi)
 
-      compute_alpha_square_lagrange()
+      compute_alpha_square_lagrange_0()
       verify_quotient_poly_eval_at_zeta(proof)
       fold_h(proof)
       compute_commitment_linearised_polynomial(proof)
@@ -479,7 +479,7 @@ library PlonkVerifier {
       
       check := mload(add(mem, state_check_var))
 
-      function compute_alpha_square_lagrange() {   
+      function compute_alpha_square_lagrange_0() {   
         let state := mload(0x40)
         let mPtr := add(mload(0x40), state_last_mem)
 
