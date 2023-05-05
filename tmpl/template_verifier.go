@@ -576,33 +576,33 @@ library PlonkVerifier {
         let offset := add(0x200, mul(vk_nb_commitments_commit_api, 0x40)) // 0x40 = 2*0x20
         let mPtrOffset := add(mPtr, offset)
 
-        let state_folded_digests := add(state, state_folded_digests_x)
-        mstore(state_folded_digests, mload(add(mPtr,0x40)))
+        let l_state_folded_digests := add(state, state_folded_digests_x)
+        mstore(l_state_folded_digests, mload(add(mPtr,0x40)))
         mstore(add(state, state_folded_digests_y), mload(add(mPtr,0x60)))
         mstore(add(state, state_folded_claimed_values), mload(add(aproof, proof_quotient_polynomial_at_zeta)))
 
-        point_acc_mul(state_folded_digests, add(mPtr,0x80), acc_gamma, mPtrOffset)
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x80), acc_gamma, mPtrOffset)
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_linearised_polynomial_at_zeta), acc_gamma)
         mstore(add(state, state_check_var), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0xc0), acc_gamma, mPtrOffset)
+        point_acc_mul(l_state_folded_digests, add(mPtr,0xc0), acc_gamma, mPtrOffset)
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_l_at_zeta), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x100), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x100), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_r_at_zeta), acc_gamma)
 
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x140), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x140), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_o_at_zeta), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x180), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x180), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_s1_at_zeta), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x1c0), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x1c0), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_s2_at_zeta), acc_gamma)
         
         let poscaz := add(aproof, proof_openings_selector_commit_api_at_zeta)
@@ -610,7 +610,7 @@ library PlonkVerifier {
         for {let i := 0} lt(i, vk_nb_commitments_commit_api) {i:=add(i,1)}
         {
           acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-          point_acc_mul(state_folded_digests, opca, acc_gamma, add(mPtr, offset))
+          point_acc_mul(l_state_folded_digests, opca, acc_gamma, add(mPtr, offset))
           fr_acc_mul(add(state, state_folded_claimed_values), poscaz, acc_gamma)
           poscaz := add(poscaz, 0x20)
           opca := add(opca, 0x40)
@@ -674,26 +674,28 @@ library PlonkVerifier {
         let state := mload(0x40)
         let mPtr := add(mload(0x40), state_last_mem)
 
+        let l_state_linearised_polynomial := add(state, state_linearised_polynomial_x) 
+
         mstore(mPtr, vk_ql_com_x)
         mstore(add(mPtr,0x20), vk_ql_com_y)
-        point_mul(add(state, state_linearised_polynomial_x), mPtr, mload(add(aproof, proof_l_at_zeta)), add(mPtr,0x40))
+        point_mul(l_state_linearised_polynomial, mPtr, mload(add(aproof, proof_l_at_zeta)), add(mPtr,0x40))
 
         mstore(mPtr, vk_qr_com_x)
         mstore(add(mPtr,0x20), vk_qr_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,mload(add(aproof, proof_r_at_zeta)),add(mPtr,0x40))
+        point_acc_mul(l_state_linearised_polynomial,mPtr,mload(add(aproof, proof_r_at_zeta)),add(mPtr,0x40))
         
         let rl := mulmod(mload(add(aproof, proof_l_at_zeta)), mload(add(aproof, proof_r_at_zeta)), r_mod)
         mstore(mPtr, vk_qm_com_x)
         mstore(add(mPtr,0x20), vk_qm_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,rl,add(mPtr,0x40))
+        point_acc_mul(l_state_linearised_polynomial,mPtr,rl,add(mPtr,0x40))
         
         mstore(mPtr, vk_qo_com_x)
         mstore(add(mPtr,0x20), vk_qo_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,mload(add(aproof, proof_o_at_zeta)),add(mPtr,0x40))
+        point_acc_mul(l_state_linearised_polynomial,mPtr,mload(add(aproof, proof_o_at_zeta)),add(mPtr,0x40))
         
         mstore(mPtr, vk_qk_com_x)
         mstore(add(mPtr, 0x20), vk_qk_com_y)
-        point_add(add(state, state_linearised_polynomial_x),add(state, state_linearised_polynomial_x),mPtr,add(mPtr, 0x40))
+        point_add(l_state_linearised_polynomial,l_state_linearised_polynomial,mPtr,add(mPtr, 0x40))
 
         let commits_api_at_zeta := add(aproof, proof_openings_selector_commit_api_at_zeta)
         let commits_api := add(aproof, add(proof_openings_selector_commit_api_at_zeta, mul(vk_nb_commitments_commit_api, 0x20)))
@@ -701,19 +703,18 @@ library PlonkVerifier {
         {
           mstore(mPtr, mload(commits_api))
           mstore(add(mPtr, 0x20), mload(add(commits_api, 0x20)))
-          point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,mload(commits_api_at_zeta),add(mPtr,0x40))
+          point_acc_mul(l_state_linearised_polynomial,mPtr,mload(commits_api_at_zeta),add(mPtr,0x40))
           commits_api_at_zeta := add(commits_api_at_zeta, 0x20)
           commits_api := add(commits_api, 0x40)
         }
 
         mstore(mPtr, vk_s3_com_x)
         mstore(add(mPtr, 0x20), vk_s3_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x), mPtr, s1, add(mPtr, 0x40))
+        point_acc_mul(l_state_linearised_polynomial, mPtr, s1, add(mPtr, 0x40))
 
         mstore(mPtr, mload(add(aproof, proof_grand_product_commitment_x)))
         mstore(add(mPtr, 0x20), mload(add(aproof, proof_grand_product_commitment_y)))
-        point_acc_mul(add(state, state_linearised_polynomial_x), mPtr, s2, add(mPtr, 0x40))
-
+        point_acc_mul(l_state_linearised_polynomial, mPtr, s2, add(mPtr, 0x40))
       }
 
       function compute_commitment_linearised_polynomial(aproof) {

@@ -15,40 +15,40 @@ library PlonkVerifier {
   uint256 constant g2_srs_0_y_0 = 4082367875863433681332203403145435568316851327593401208105741076214120093531;
   uint256 constant g2_srs_0_y_1 = 8495653923123431417604973247489272438418190587263600148770280649306958101930;
   
-  uint256 constant g2_srs_1_x_0 = 773352084610697913134918094354876766562666243864136247140361142408314267884;
-  uint256 constant g2_srs_1_x_1 = 11218246700333425792238983237125898634636314964427869911735571873313895719072;
-  uint256 constant g2_srs_1_y_0 = 6660782902249256809346513260596354940837806242590375606090014149092726995606;
-  uint256 constant g2_srs_1_y_1 = 7062182478707901216327160406524951220237459909746035911956337363683767573240;
+  uint256 constant g2_srs_1_x_0 = 4930019989024462322902940923152752874569048063454582416386519998837730276316;
+  uint256 constant g2_srs_1_x_1 = 15082946729699384835849420630380326942991933698360096086981070401020056835076;
+  uint256 constant g2_srs_1_y_0 = 8286406072138364278801084972678624051522907826231956501413323182350020190429;
+  uint256 constant g2_srs_1_y_1 = 21748829029523107806200650590272300010078894920714805987614711207923987442604;
   
   // ----------------------- vk ---------------------
   uint256 constant vk_domain_size = 32;
   uint256 constant vk_inv_domain_size = 21204235282094297871551205565717985242031228012903033270457635305745314480129;
   uint256 constant vk_omega = 4419234939496763621076330863786513495701855246241724391626358375488475697872;
-  uint256 constant vk_ql_com_x = 13545724670871197416846907324745178172137987164821529398594225827779690603360;
-  uint256 constant vk_ql_com_y = 14156847316743924056427245190160769167570943790361579273785228942536542349060;
-  uint256 constant vk_qr_com_x = 4248325208258011561926294830205119399187124137871167571206503273734237931159;
-  uint256 constant vk_qr_com_y = 16455007878471917457632173043357422654529467766218798001392807086011681919227;
-  uint256 constant vk_qm_com_x = 19664655002314353932445297212190100148802789852003999933569483791006668100772;
-  uint256 constant vk_qm_com_y = 21799503284789978557812565005041056204183544994489837291267096803519273893201;
-  uint256 constant vk_qo_com_x = 4248325208258011561926294830205119399187124137871167571206503273734237931159;
-  uint256 constant vk_qo_com_y = 5433234993367357764614232701899852434166843391079025661296230808633544289356;
-  uint256 constant vk_qk_com_x = 19664655002314353932445297212190100148802789852003999933569483791006668100772;
-  uint256 constant vk_qk_com_y = 88739587049296664433840740216218884512766162807986371421941091125952315382;
+  uint256 constant vk_ql_com_x = 3211867434948726369001066637883720099261789461823763079929914940393065637125;
+  uint256 constant vk_ql_com_y = 9356693436357403287061736636034574176574355747120579341311302812362761841021;
+  uint256 constant vk_qr_com_x = 2924524127766480034284390085401745637352000757333737898240419147296824526839;
+  uint256 constant vk_qr_com_y = 3609787000435192700905273826211811797827516312620096263022103935734222161400;
+  uint256 constant vk_qm_com_x = 13039080942199820916409682473099751650982841538557048571668159766059339723491;
+  uint256 constant vk_qm_com_y = 17142337117333033995671831369909649069529405060075798265143378731894420016668;
+  uint256 constant vk_qo_com_x = 2924524127766480034284390085401745637352000757333737898240419147296824526839;
+  uint256 constant vk_qo_com_y = 18278455871404082521341131919045463290868794844677727399666933958911004047183;
+  uint256 constant vk_qk_com_x = 13039080942199820916409682473099751650982841538557048571668159766059339723491;
+  uint256 constant vk_qk_com_y = 4745905754506241226574574375347626019166906097222025397545659162750806191915;
   
-  uint256 constant vk_s1_com_x = 12572831047553136839177585227025805733444648490130797373772014794282439164282;
-  uint256 constant vk_s1_com_y = 12770373361344869158466615302584598705866627106939925740976695908188235228277;
+  uint256 constant vk_s1_com_x = 4916941210277467473985158468899091539772570770300354531382268124528888431419;
+  uint256 constant vk_s1_com_y = 187231435731512472191307597111906504255647620372719025306265325027381414544;
   
-  uint256 constant vk_s2_com_x = 17618344475475332263511539294625699898471520766164647058205963990330952805786;
-  uint256 constant vk_s2_com_y = 15198117026543321385754230826251742064101809598964394965658437849472988970329;
+  uint256 constant vk_s2_com_x = 15517616131850948462299123667369603312370054792491455837683033408533165867791;
+  uint256 constant vk_s2_com_y = 20570687079345290234037646330440718025045209005362594052448555010415558599072;
   
-  uint256 constant vk_s3_com_x = 3582014108827256905858881923528036465176429204627871599020827672214691075724;
-  uint256 constant vk_s3_com_y = 14650520018072349220957606258229148200452653322908422345640388540261975775580;
+  uint256 constant vk_s3_com_x = 10389847211011128602283654304710629433036137057128933161703859353704815341350;
+  uint256 constant vk_s3_com_y = 3018399724806800146397118303933659163434562850236806160390135276775401148788;
   
   uint256 constant vk_coset_shift = 5;
   
   // TODO wait for the multi commit eval to auto generate the loop
-  uint256 constant vk_selector_commitments_commit_api_0_x = 9172552877463751247144996005396389926660298833315786866480268631537192015832;
-  uint256 constant vk_selector_commitments_commit_api_0_y = 19378076816151142004517995873267457264062629916852913888172477208627074907591;
+  uint256 constant vk_selector_commitments_commit_api_0_x = 6795791913926604381936783313966258973717235912697358511049068600617935198325;
+  uint256 constant vk_selector_commitments_commit_api_0_y = 13634772766957480635388862174574426807135606341536710161163833338212499515191;
 
   
   function load_vk_commitments_indices_commit_api(uint256[] memory v)
@@ -585,33 +585,33 @@ library PlonkVerifier {
         let offset := add(0x200, mul(vk_nb_commitments_commit_api, 0x40)) // 0x40 = 2*0x20
         let mPtrOffset := add(mPtr, offset)
 
-        let state_folded_digests := add(state, state_folded_digests_x)
-        mstore(state_folded_digests, mload(add(mPtr,0x40)))
+        let l_state_folded_digests := add(state, state_folded_digests_x)
+        mstore(l_state_folded_digests, mload(add(mPtr,0x40)))
         mstore(add(state, state_folded_digests_y), mload(add(mPtr,0x60)))
         mstore(add(state, state_folded_claimed_values), mload(add(aproof, proof_quotient_polynomial_at_zeta)))
 
-        point_acc_mul(state_folded_digests, add(mPtr,0x80), acc_gamma, mPtrOffset)
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x80), acc_gamma, mPtrOffset)
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_linearised_polynomial_at_zeta), acc_gamma)
         mstore(add(state, state_check_var), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0xc0), acc_gamma, mPtrOffset)
+        point_acc_mul(l_state_folded_digests, add(mPtr,0xc0), acc_gamma, mPtrOffset)
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_l_at_zeta), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x100), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x100), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_r_at_zeta), acc_gamma)
 
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x140), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x140), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_o_at_zeta), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x180), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x180), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_s1_at_zeta), acc_gamma)
         
         acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-        point_acc_mul(state_folded_digests, add(mPtr,0x1c0), acc_gamma, add(mPtr, offset))
+        point_acc_mul(l_state_folded_digests, add(mPtr,0x1c0), acc_gamma, add(mPtr, offset))
         fr_acc_mul(add(state, state_folded_claimed_values), add(aproof, proof_s2_at_zeta), acc_gamma)
         
         let poscaz := add(aproof, proof_openings_selector_commit_api_at_zeta)
@@ -619,7 +619,7 @@ library PlonkVerifier {
         for {let i := 0} lt(i, vk_nb_commitments_commit_api) {i:=add(i,1)}
         {
           acc_gamma := mulmod(acc_gamma, l_gamma_kzg, r_mod)
-          point_acc_mul(state_folded_digests, opca, acc_gamma, add(mPtr, offset))
+          point_acc_mul(l_state_folded_digests, opca, acc_gamma, add(mPtr, offset))
           fr_acc_mul(add(state, state_folded_claimed_values), poscaz, acc_gamma)
           poscaz := add(poscaz, 0x20)
           opca := add(opca, 0x40)
@@ -683,26 +683,28 @@ library PlonkVerifier {
         let state := mload(0x40)
         let mPtr := add(mload(0x40), state_last_mem)
 
+        let l_state_linearised_polynomial := add(state, state_linearised_polynomial_x) 
+
         mstore(mPtr, vk_ql_com_x)
         mstore(add(mPtr,0x20), vk_ql_com_y)
-        point_mul(add(state, state_linearised_polynomial_x), mPtr, mload(add(aproof, proof_l_at_zeta)), add(mPtr,0x40))
+        point_mul(l_state_linearised_polynomial, mPtr, mload(add(aproof, proof_l_at_zeta)), add(mPtr,0x40))
 
         mstore(mPtr, vk_qr_com_x)
         mstore(add(mPtr,0x20), vk_qr_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,mload(add(aproof, proof_r_at_zeta)),add(mPtr,0x40))
+        point_acc_mul(l_state_linearised_polynomial,mPtr,mload(add(aproof, proof_r_at_zeta)),add(mPtr,0x40))
         
         let rl := mulmod(mload(add(aproof, proof_l_at_zeta)), mload(add(aproof, proof_r_at_zeta)), r_mod)
         mstore(mPtr, vk_qm_com_x)
         mstore(add(mPtr,0x20), vk_qm_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,rl,add(mPtr,0x40))
+        point_acc_mul(l_state_linearised_polynomial,mPtr,rl,add(mPtr,0x40))
         
         mstore(mPtr, vk_qo_com_x)
         mstore(add(mPtr,0x20), vk_qo_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,mload(add(aproof, proof_o_at_zeta)),add(mPtr,0x40))
+        point_acc_mul(l_state_linearised_polynomial,mPtr,mload(add(aproof, proof_o_at_zeta)),add(mPtr,0x40))
         
         mstore(mPtr, vk_qk_com_x)
         mstore(add(mPtr, 0x20), vk_qk_com_y)
-        point_add(add(state, state_linearised_polynomial_x),add(state, state_linearised_polynomial_x),mPtr,add(mPtr, 0x40))
+        point_add(l_state_linearised_polynomial,l_state_linearised_polynomial,mPtr,add(mPtr, 0x40))
 
         let commits_api_at_zeta := add(aproof, proof_openings_selector_commit_api_at_zeta)
         let commits_api := add(aproof, add(proof_openings_selector_commit_api_at_zeta, mul(vk_nb_commitments_commit_api, 0x20)))
@@ -710,19 +712,18 @@ library PlonkVerifier {
         {
           mstore(mPtr, mload(commits_api))
           mstore(add(mPtr, 0x20), mload(add(commits_api, 0x20)))
-          point_acc_mul(add(state, state_linearised_polynomial_x),mPtr,mload(commits_api_at_zeta),add(mPtr,0x40))
+          point_acc_mul(l_state_linearised_polynomial,mPtr,mload(commits_api_at_zeta),add(mPtr,0x40))
           commits_api_at_zeta := add(commits_api_at_zeta, 0x20)
           commits_api := add(commits_api, 0x40)
         }
 
         mstore(mPtr, vk_s3_com_x)
         mstore(add(mPtr, 0x20), vk_s3_com_y)
-        point_acc_mul(add(state, state_linearised_polynomial_x), mPtr, s1, add(mPtr, 0x40))
+        point_acc_mul(l_state_linearised_polynomial, mPtr, s1, add(mPtr, 0x40))
 
         mstore(mPtr, mload(add(aproof, proof_grand_product_commitment_x)))
         mstore(add(mPtr, 0x20), mload(add(aproof, proof_grand_product_commitment_y)))
-        point_acc_mul(add(state, state_linearised_polynomial_x), mPtr, s2, add(mPtr, 0x40))
-
+        point_acc_mul(l_state_linearised_polynomial, mPtr, s2, add(mPtr, 0x40))
       }
 
       function compute_commitment_linearised_polynomial(aproof) {
