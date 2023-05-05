@@ -863,13 +863,6 @@ library PlonkVerifier {
         res := mload(mPtr)
       }
     }
-    // success = true;
-    // if (success ==true){
-    //   emit PrintUint256(1);
-    // }
-    // if (success==false){
-    //   emit PrintUint256(0);
-    // }
 
     return success;
 
