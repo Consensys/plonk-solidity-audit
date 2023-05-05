@@ -145,10 +145,7 @@ library PlonkVerifier {
   uint256 constant state_success = 0x240;
   uint256 constant state_check_var = 0x260; // /!\ this slot is used for debugging only
 
-
   uint256 constant state_last_mem = 0x280;
-
-  event PrintUint256(uint256 a);
 
   function derive_gamma_beta_alpha_zeta(bytes memory proof, uint256[] memory public_inputs)
   internal view returns(uint256, uint256, uint256, uint256) {
