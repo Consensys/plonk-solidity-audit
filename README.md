@@ -193,3 +193,7 @@ l(ζ)Ql(ζ)+r(ζ)Qr(ζ)+r(ζ)l(ζ)Qm(ζ)+o(ζ)Qo(ζ)+Qk(ζ)+∑ᵢQc_{i}(ζ)Pi_{
 ## Risks
 
 If any of the public inputs (see contracts/TestVerifier.sol) or the proof (see contracts/TestVerifier.sol), the proof should not pass.
+
+## Contact
+
+Thomas Piellard (CEST) @ThomasPiellard on telegram
