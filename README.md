@@ -64,7 +64,10 @@ Both are described in the next section.
 
 ### Mapping solidity <-> go
 
+Reference go code:
+
 [REF_CODE_VK](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/setup.go#L55)
+
 [REF_CODE_PROOF](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/prove.go#L46)
 
 #### Variables
@@ -165,6 +168,24 @@ uint256 constant proof_opening_at_zeta_omega_y
 * `derive_gamma_beta_alpha_zeta` : corresponds to l.48 to l.80 of [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L92).
 
 * `compute_pi` : corresponds to l.92 to l.135 of [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L92). We actually compute 
-`∑_{i<n} pi_{i}Lᵢ{ζ}`, with `Lᵢ(ζ) = ωⁱ/n(ζⁿ-1)/(ζ-ωⁱ)` in a first step.  Then we add to this sum `∑ᵢL_{i∈ I}Hash(Pi_{i})`. `I` here is a set of indices (obtained with `load_vk_commitments_indices_commit_api`) corresponding to the position of new public inputs derived from hashing commitments contained in `add(proof, (mul(openings_selector_commits,0x20)))`. The hash function that is used is described [here](https://tools.ietf.org/html/draft-irtf-cfrg-hash-to-curve-06#section-5.2), with the output size hardcoded to 1 and the string hardcoded to "BSB22-Plonk". The hash function is in `contracts/Utils.sol` (the go counterpart is in [gnark-crypto](https://github.com/ConsenSys/gnark-crypto/blob/master/ecc/bn254/fr/element.go#L744)).
+`∑_{i<n} pi_{i}Lᵢ{ζ}`, with `Lᵢ(ζ) = ωⁱ/n(ζⁿ-1)/(ζ-ωⁱ)` in a first step.  Then we add to this sum `∑ᵢL_{i∈ I}Hash(Pi_{i})`. `I` here is a set of indices (obtained with `load_vk_commitments_indices_commit_api`) corresponding to the position of new public inputs derived from hashing the commitments contained in `add(proof, (mul(openings_selector_commits,0x20)))`. The hash function that is used is described [here](https://tools.ietf.org/html/draft-irtf-cfrg-hash-to-curve-06#section-5.2), with the output size hardcoded to 1 and the string hardcoded to "BSB22-Plonk". The hash function is in `contracts/Utils.sol` (the go counterpart is in [gnark-crypto](https://github.com/ConsenSys/gnark-crypto/blob/master/ecc/bn254/fr/element.go#L744)).
 
 * `compute_alpha_square_lagrange` computes `α²1/n(ζⁿ-1)/(ζ-1)` and stores it in the state (the value is reused several times)
+
+* `verify_quotient_poly_eval_at_zeta` corresponds to l.137 to l.176 [here](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L137). This part checks that the following equation holds:
+```
+l(ζ)Ql(ζ)+r(ζ)Qr(ζ)+r(ζ)l(ζ)Qm(ζ)+o(ζ)Qo(ζ)+Qk(ζ)+∑ᵢQc_{i}(ζ)Pi_{i}(ζ) + 
+
+α[ Z(νζ)(L(ζ)+βζ+γ)(R(ζ)+uβζ+γ)(O(ζ)+u²βζ+γ)
+ - Z(ζ)(L(ζ)+β σ₁(ζ)+γ)(R(ζ)+β σ₂(ζ)+γ)(O(ζ)+β σ₃(ζ)+γ)] +
+
+α²L₀(ζ)(Z(ζ)-1) = (ζⁿ - 1)H(ζ)
+```
+
+* `fold_h`folds the commitment to H (cf [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L178))
+
+* `compute_commitment_linearised_polynomial` computes the full commitment of the linearised polynomial digest (cf [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L190))
+
+* `compute_gamma_kzg`, `fold_state`: those functions correspond to the `FoldProof` function of the Kzg package in gnark-crypto (see [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L232)).
+
+* `batch_verify_multi_points` corresponds to [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L253), where here in solidity the number of proofs to fold is hardcoded to 2.
