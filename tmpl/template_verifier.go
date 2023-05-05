@@ -43,7 +43,7 @@ library PlonkVerifier {
 
   {{ if (gt (len .CommitmentConstraintIndexes) 0 )}}
   function load_vk_commitments_indices_commit_api(uint256[] memory v)
-  internal view {
+  internal pure {
     assembly {
     let _v := add(v, 0x20)
     {{ range .CommitmentConstraintIndexes }}
@@ -151,7 +151,7 @@ library PlonkVerifier {
   event PrintUint256(uint256 a);
 
   function derive_gamma_beta_alpha_zeta(bytes memory proof, uint256[] memory public_inputs)
-  internal returns(uint256, uint256, uint256, uint256) {
+  internal view returns(uint256, uint256, uint256, uint256) {
 
     uint256 gamma;
     uint256 beta;
@@ -273,7 +273,7 @@ library PlonkVerifier {
   }
 
   function load_wire_commitments_commit_api(uint256[] memory wire_commitments, bytes memory proof)
-  internal {
+  internal pure {
     assembly {
       let w := add(wire_commitments, 0x20)
       let p := add(proof, proof_openings_selector_commit_api_at_zeta)
@@ -291,7 +291,7 @@ library PlonkVerifier {
   }
 
   function compute_ith_lagrange_at_z(uint256 zeta, uint256 i) 
-  internal returns (uint256) {
+  internal view returns (uint256) {
 
     uint256 res;
     assembly {
@@ -326,7 +326,7 @@ library PlonkVerifier {
         bytes memory proof,
         uint256[] memory public_inputs,
         uint256 zeta
-    ) internal returns (uint256) {
+    ) internal view returns (uint256) {
 
       // evaluation of Z=Xⁿ⁻¹ at ζ
       // uint256 zeta_power_n_minus_one = Fr.pow(zeta, vk_domain_size);
@@ -765,10 +765,11 @@ library PlonkVerifier {
         let n_plus_two := add(vk_domain_size, 2)
         let mPtr := add(mload(0x40), state_last_mem)
         let zeta_power_n_plus_two := pow(mload(add(state, state_zeta)), n_plus_two, mPtr)
-        point_mul(add(state, state_folded_h_x), add(aproof, proof_h_2_x), zeta_power_n_plus_two, mPtr)
-        point_add(add(state, state_folded_h_x), add(state, state_folded_h_x), add(aproof, proof_h_1_x), mPtr)
-        point_mul(add(state, state_folded_h_x), add(state, state_folded_h_x), zeta_power_n_plus_two, mPtr)
-        point_add(add(state, state_folded_h_x), add(state, state_folded_h_x), add(aproof, proof_h_0_x), mPtr)
+        let l_state_folded_h := add(state, state_folded_h_x)
+        point_mul(l_state_folded_h, add(aproof, proof_h_2_x), zeta_power_n_plus_two, mPtr)
+        point_add(l_state_folded_h, l_state_folded_h, add(aproof, proof_h_1_x), mPtr)
+        point_mul(l_state_folded_h, l_state_folded_h, zeta_power_n_plus_two, mPtr)
+        point_add(l_state_folded_h, l_state_folded_h, add(aproof, proof_h_0_x), mPtr)
       }
 
       function verify_quotient_poly_eval_at_zeta(aproof) {
