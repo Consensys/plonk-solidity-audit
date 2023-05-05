@@ -188,4 +188,8 @@ l(ζ)Ql(ζ)+r(ζ)Qr(ζ)+r(ζ)l(ζ)Qm(ζ)+o(ζ)Qo(ζ)+Qk(ζ)+∑ᵢQc_{i}(ζ)Pi_{
 
 * `compute_gamma_kzg`, `fold_state`: those functions correspond to the `FoldProof` function of the Kzg package in gnark-crypto (see [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L232)).
 
-* `batch_verify_multi_points` corresponds to [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L253), where here in solidity the number of proofs to fold is hardcoded to 2.
+* `batch_verify_multi_points` corresponds to [gnark](https://github.com/ConsenSys/gnark/blob/develop/backend/plonk/bn254/verify.go#L253), where here in solidity the number of proofs to fold is hardcoded to 2. The algo also corresponds to section 3.1 of the [plonk paper](https://eprint.iacr.org/2019/953.pdf).
+
+## Risks
+
+If any of the public inputs (see contracts/TestVerifier.sol) or the proof (see contracts/TestVerifier.sol), the proof should not pass.
