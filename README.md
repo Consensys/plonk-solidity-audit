@@ -33,7 +33,7 @@ The files in the scope of the audit are
 * contracts/Utils.sol
 * contracts/Verifier.sol
 
-All the remaing filed except the two above are out of scope.
+All the remaing files except the two above are out of scope.
 
 ## Intended Functionnality
 
