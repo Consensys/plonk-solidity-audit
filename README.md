@@ -196,4 +196,4 @@ If any of the public inputs (see contracts/TestVerifier.sol) or the proof (see c
 
 ## Contact
 
-Thomas Piellard (CEST) @ThomasPiellard on telegram
+Thomas Piellard (timezone CEST) @ThomasPiellard on telegram
