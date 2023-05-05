@@ -181,6 +181,8 @@ library PlonkVerifier {
         let mPtr := mload(0x40)
 
         // gamma
+        // gamma in ascii is [0x67,0x61,0x6d, 0x6d, 0x61]
+        // (same for alpha, beta, zeta)
         mstore(mPtr, 0x67616d6d61) // "gamma"
 
         mstore(add(mPtr, 0x20), vk_s1_com_x)
