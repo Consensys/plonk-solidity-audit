@@ -227,6 +227,7 @@ library PlonkVerifier {
           _mPtr := add(_mPtr, 0x20)
         }
 
+        {{ if (gt (len .CommitmentConstraintIndexes) 0 )}}
         let _proof := add(aproof, proof_openings_selector_commit_api_at_zeta)
         _proof := add(_proof, mul(vk_nb_commitments_commit_api, 0x20))
         for {let i:=0} lt(i, vk_nb_commitments_commit_api) {i:=add(i,1)}
@@ -236,7 +237,7 @@ library PlonkVerifier {
           _mPtr := add(_mPtr, 0x40)
           _proof := add(_proof, 0x40)
         }
-        // pop(staticcall(sub(gas(), 2000), 0x2, add(mPtr, 0x1b), 0x2a5, mPtr, 0x20)) //0x1b -> 000.."gamma"
+        {{ end }}
 
         mstore(_mPtr, mload(add(aproof, proof_l_com_x)))
         mstore(add(_mPtr, 0x20), mload(add(aproof, proof_l_com_y)))
@@ -287,6 +288,7 @@ library PlonkVerifier {
     return (gamma, beta, alpha, zeta);
   }
 
+  {{ if (gt (len .CommitmentConstraintIndexes) 0 )}}
   function load_wire_commitments_commit_api(uint256[] memory wire_commitments, bytes memory proof)
   internal pure {
     assembly {
@@ -304,6 +306,7 @@ library PlonkVerifier {
       }
     }
   }
+  {{ end }}
 
   function compute_ith_lagrange_at_z(uint256 zeta, uint256 i) 
   internal view returns (uint256) {
@@ -434,25 +437,23 @@ library PlonkVerifier {
         zeta_power_n_minus_one := addmod(zeta_power_n_minus_one, sub(r_mod, 1), r_mod)
       }
 
+      {{ if (gt (len .CommitmentConstraintIndexes) 0 )}}
       uint256[] memory commitment_indices = new uint256[](vk_nb_commitments_commit_api);
       load_vk_commitments_indices_commit_api(commitment_indices);
-  
-      if (vk_nb_commitments_commit_api > 0) {
 
-        uint256[] memory wire_committed_commitments;
-        wire_committed_commitments = new uint256[](2*vk_nb_commitments_commit_api);
-        load_wire_commitments_commit_api(wire_committed_commitments, proof);
+      uint256[] memory wire_committed_commitments = new uint256[](2*vk_nb_commitments_commit_api);
+      load_wire_commitments_commit_api(wire_committed_commitments, proof);
 
-        for (uint256 i=0; i<vk_nb_commitments_commit_api; i++){
-            
-            uint256 hash_res = Utils.hash_fr(wire_committed_commitments[2*i], wire_committed_commitments[2*i+1]);
-            uint256 a = compute_ith_lagrange_at_z(zeta, commitment_indices[i]+public_inputs.length);
-            assembly {
-              a := mulmod(hash_res, a, r_mod)
-              pi := addmod(pi, a, r_mod)
-            }
-        }
+      for (uint256 i=0; i<vk_nb_commitments_commit_api; i++){
+          
+          uint256 hash_res = Utils.hash_fr(wire_committed_commitments[2*i], wire_committed_commitments[2*i+1]);
+          uint256 a = compute_ith_lagrange_at_z(zeta, commitment_indices[i]+public_inputs.length);
+          assembly {
+            a := mulmod(hash_res, a, r_mod)
+            pi := addmod(pi, a, r_mod)
+          }
       }
+      {{ end }}
       
       return pi;
     }
@@ -654,8 +655,8 @@ library PlonkVerifier {
         mstore(add(mPtr,0x1c0), vk_s2_com_x)
         mstore(add(mPtr,0x1e0), vk_s2_com_y)
         
-        {{ range $index, $element := .CommitmentConstraintIndexes }}
         let offset := 0x200
+        {{ range $index, $element := .CommitmentConstraintIndexes }}
         mstore(add(mPtr,offset), vk_selector_commitments_commit_api_{{ $index }}_x)
         mstore(add(mPtr,add(offset, 0x20)), vk_selector_commitments_commit_api_{{ $index }}_y)
         offset := add(offset, 0x40)

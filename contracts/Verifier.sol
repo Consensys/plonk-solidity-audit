@@ -31,40 +31,40 @@ library PlonkVerifier {
   uint256 constant g2_srs_0_y_0 = 4082367875863433681332203403145435568316851327593401208105741076214120093531;
   uint256 constant g2_srs_0_y_1 = 8495653923123431417604973247489272438418190587263600148770280649306958101930;
   
-  uint256 constant g2_srs_1_x_0 = 13986331159221826815272246124920883185916147755615097327598353363200099487010;
-  uint256 constant g2_srs_1_x_1 = 9202156706405430862836368606994352472621849357511013728230077865932814205576;
-  uint256 constant g2_srs_1_y_0 = 7318131801763411550888807211345177160536885256469051775726026385433982096390;
-  uint256 constant g2_srs_1_y_1 = 20707154504056529625869391612409749074432983772584417824915469163572439505249;
+  uint256 constant g2_srs_1_x_0 = 18469474764091300207969441002824674761417641526767908873143851616926597782709;
+  uint256 constant g2_srs_1_x_1 = 17691709543839494245591259280773972507311536864513996659348773884770927133474;
+  uint256 constant g2_srs_1_y_0 = 2799122126101651639961126614695310298819570600001757598712033559848160757380;
+  uint256 constant g2_srs_1_y_1 = 3054480525781015242495808388429905877188466478626784485318957932446534030175;
   
   // ----------------------- vk ---------------------
   uint256 constant vk_domain_size = 32;
   uint256 constant vk_inv_domain_size = 21204235282094297871551205565717985242031228012903033270457635305745314480129;
   uint256 constant vk_omega = 4419234939496763621076330863786513495701855246241724391626358375488475697872;
-  uint256 constant vk_ql_com_x = 12413378160545803763675388104894590599313977198839815171413947048224352742640;
-  uint256 constant vk_ql_com_y = 12420178456505665735497387062923503718670747791223201101926957029474316684973;
-  uint256 constant vk_qr_com_x = 18514414769282960399775480777563809390263661343988756973382631729943492545883;
-  uint256 constant vk_qr_com_y = 10291189488437571150376200303019647738645037706378268552876756166300344792248;
-  uint256 constant vk_qm_com_x = 20846857634972894824890576970152259081530438148620990345246540915286146718318;
-  uint256 constant vk_qm_com_y = 11605582660472749579825953390195783206155134766080282266460895105050975257044;
-  uint256 constant vk_qo_com_x = 18514414769282960399775480777563809390263661343988756973382631729943492545883;
-  uint256 constant vk_qo_com_y = 11597053383401704071870205442237627350051273450919555109812281728344881416335;
-  uint256 constant vk_qk_com_x = 20846857634972894824890576970152259081530438148620990345246540915286146718318;
-  uint256 constant vk_qk_com_y = 10282660211366525642420452355061491882541176391217541396228142789594250951539;
+  uint256 constant vk_ql_com_x = 3415481203915538094329639896101213334747672747580843536845495811911884071068;
+  uint256 constant vk_ql_com_y = 16616638156096139383737670043897693190580137247877592717991200671551119882061;
+  uint256 constant vk_qr_com_x = 17629881274594407449009464720222756917096843190610141340689108105657844266652;
+  uint256 constant vk_qr_com_y = 16578548171559087040575509696368679600155198161076534845367337041723079265703;
+  uint256 constant vk_qm_com_x = 2011943980564824033000544720516523843571198837264612554204282580812537161849;
+  uint256 constant vk_qm_com_y = 3119169503628713690827874476409849088525975724867828774250172908685266916682;
+  uint256 constant vk_qo_com_x = 17629881274594407449009464720222756917096843190610141340689108105657844266652;
+  uint256 constant vk_qo_com_y = 5309694700280188181670896048888595488541112996221288817321700852922146942880;
+  uint256 constant vk_qk_com_x = 2011943980564824033000544720516523843571198837264612554204282580812537161849;
+  uint256 constant vk_qk_com_y = 18769073368210561531418531268847426000170335432429994888438864985959959291901;
   
-  uint256 constant vk_s1_com_x = 11235752027786243934354720608647476684765025827842673049887839688065881113033;
-  uint256 constant vk_s1_com_y = 8203512226714154857072407704433344017947087523402634878192325154139813203669;
+  uint256 constant vk_s1_com_x = 72447878351168690414724388727375419228716605043769233093990250276967716098;
+  uint256 constant vk_s1_com_y = 21861285996877442346565048330988400050048662336525585159327412017294341375688;
   
-  uint256 constant vk_s2_com_x = 9974557231261255710177499870079651949124148053635488697477850802435001065756;
-  uint256 constant vk_s2_com_y = 7601096499637846936624024616210211460667748052348425299032330712564950190361;
+  uint256 constant vk_s2_com_x = 8263701880110672991896166807468183709784343805075169867434442457110204923093;
+  uint256 constant vk_s2_com_y = 9158935259944403769348990729780185474118227118453574913539066305799156720803;
   
-  uint256 constant vk_s3_com_x = 14936490807207139128127007827631495694369925410337144392111721084292097299404;
-  uint256 constant vk_s3_com_y = 12894837160603394210361216353023530203012390525065901801454905143920869670317;
+  uint256 constant vk_s3_com_x = 13318381801799849861189086002676220842305846522944054397962392311030225390875;
+  uint256 constant vk_s3_com_y = 21406197483035240966888238376754929402899475188478547207192380869999480872575;
   
   uint256 constant vk_coset_shift = 5;
   
   // TODO wait for the multi commit eval to auto generate the loop
-  uint256 constant vk_selector_commitments_commit_api_0_x = 14296008632887149841960740679666515346754088959149977080136424780487609030600;
-  uint256 constant vk_selector_commitments_commit_api_0_y = 19951993528951160978929796639241080010908214302958187463826094311944838685062;
+  uint256 constant vk_selector_commitments_commit_api_0_x = 936466445098970511269357877190480910277859483965446725945241463851251593122;
+  uint256 constant vk_selector_commitments_commit_api_0_y = 4950043861400357574666185134056000743679328714942515192327276413329165996740;
 
   
   function load_vk_commitments_indices_commit_api(uint256[] memory v)
@@ -236,6 +236,7 @@ library PlonkVerifier {
           _mPtr := add(_mPtr, 0x20)
         }
 
+        
         let _proof := add(aproof, proof_openings_selector_commit_api_at_zeta)
         _proof := add(_proof, mul(vk_nb_commitments_commit_api, 0x20))
         for {let i:=0} lt(i, vk_nb_commitments_commit_api) {i:=add(i,1)}
@@ -245,7 +246,7 @@ library PlonkVerifier {
           _mPtr := add(_mPtr, 0x40)
           _proof := add(_proof, 0x40)
         }
-        // pop(staticcall(sub(gas(), 2000), 0x2, add(mPtr, 0x1b), 0x2a5, mPtr, 0x20)) //0x1b -> 000.."gamma"
+        
 
         mstore(_mPtr, mload(add(aproof, proof_l_com_x)))
         mstore(add(_mPtr, 0x20), mload(add(aproof, proof_l_com_y)))
@@ -296,6 +297,7 @@ library PlonkVerifier {
     return (gamma, beta, alpha, zeta);
   }
 
+  
   function load_wire_commitments_commit_api(uint256[] memory wire_commitments, bytes memory proof)
   internal pure {
     assembly {
@@ -313,6 +315,7 @@ library PlonkVerifier {
       }
     }
   }
+  
 
   function compute_ith_lagrange_at_z(uint256 zeta, uint256 i) 
   internal view returns (uint256) {
@@ -443,25 +446,23 @@ library PlonkVerifier {
         zeta_power_n_minus_one := addmod(zeta_power_n_minus_one, sub(r_mod, 1), r_mod)
       }
 
+      
       uint256[] memory commitment_indices = new uint256[](vk_nb_commitments_commit_api);
       load_vk_commitments_indices_commit_api(commitment_indices);
-  
-      if (vk_nb_commitments_commit_api > 0) {
 
-        uint256[] memory wire_committed_commitments;
-        wire_committed_commitments = new uint256[](2*vk_nb_commitments_commit_api);
-        load_wire_commitments_commit_api(wire_committed_commitments, proof);
+      uint256[] memory wire_committed_commitments = new uint256[](2*vk_nb_commitments_commit_api);
+      load_wire_commitments_commit_api(wire_committed_commitments, proof);
 
-        for (uint256 i=0; i<vk_nb_commitments_commit_api; i++){
-            
-            uint256 hash_res = Utils.hash_fr(wire_committed_commitments[2*i], wire_committed_commitments[2*i+1]);
-            uint256 a = compute_ith_lagrange_at_z(zeta, commitment_indices[i]+public_inputs.length);
-            assembly {
-              a := mulmod(hash_res, a, r_mod)
-              pi := addmod(pi, a, r_mod)
-            }
-        }
+      for (uint256 i=0; i<vk_nb_commitments_commit_api; i++){
+          
+          uint256 hash_res = Utils.hash_fr(wire_committed_commitments[2*i], wire_committed_commitments[2*i+1]);
+          uint256 a = compute_ith_lagrange_at_z(zeta, commitment_indices[i]+public_inputs.length);
+          assembly {
+            a := mulmod(hash_res, a, r_mod)
+            pi := addmod(pi, a, r_mod)
+          }
       }
+      
       
       return pi;
     }
@@ -663,8 +664,8 @@ library PlonkVerifier {
         mstore(add(mPtr,0x1c0), vk_s2_com_x)
         mstore(add(mPtr,0x1e0), vk_s2_com_y)
         
-        
         let offset := 0x200
+        
         mstore(add(mPtr,offset), vk_selector_commitments_commit_api_0_x)
         mstore(add(mPtr,add(offset, 0x20)), vk_selector_commitments_commit_api_0_y)
         offset := add(offset, 0x40)

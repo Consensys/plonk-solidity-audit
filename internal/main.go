@@ -83,10 +83,10 @@ func getVkProofCommitmentCircuit() (bn254plonk.Proof, bn254plonk.VerifyingKey, [
 //go:generate go run main.go
 func main() {
 
+	// proof, vk, pi := getVkProofCommitmentCircuit()
 	proof, vk, pi := getVkProofCommitmentCircuit()
 
 	err := tmpl.GenerateVerifier(vk, proof, pi, "../contracts")
 	checkError(err)
-	// printvk(vk)
 
 }
