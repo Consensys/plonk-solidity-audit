@@ -148,17 +148,6 @@ func serialiseProof(proof bn254plonk.Proof) []byte {
 	return res
 }
 
-// γ, β, α, ζ
-// (ζⁿ - 1)H(ζ)
-// α²L₀(ζ)(Z(ζ)-1)
-// α²[ Z(νζ)(L(ζ)+βζ+γ)(R(ζ)+uβζ+γ)(O(ζ)+u²βζ+γ)
-// - Z(ζ)(L(ζ)+β σ₁(ζ)+γ)(R(ζ)+β σ₂(ζ)+γ)(O(ζ)+β σ₃(ζ)+γ)]
-// l(ζ)Ql(ζ)+r(ζ)Qr(ζ)+r(ζ)l(ζ)Qm(ζ)+o(ζ)Qo(ζ)+Qk(ζ)+∑ᵢQc_{i}(ζ)Pi_{i}(ζ)
-// α²1/n(ζⁿ-1)/(ζ-1)
-// ∑ᵢL_{i∈ I}Hash(Pi_{i})
-// ∑_{i∈ I}LᵢHash(Pi_{i})
-// QₗL + QᵣR + QₘLR + QₒO + Qₖ + ∑ᵢQcp_{i∈ I}Pi_{i}
-// ∑_{i<n} pi_{i}Lᵢ{ζ}, with Lᵢ(ζ) = ωⁱ/n(ζⁿ-1)/(ζ-ωⁱ)
 func main() {
 
 	// create account
@@ -180,9 +169,30 @@ func main() {
 	auth, err = getTransactionOpts(privateKey, auth, client)
 	checkError(err)
 
-	_, err = instance.TestVerifier(auth)
+	// should output true: proof and public in puts are correct
+	_, err = instance.TestVerifierCorrectProof(auth)
 	checkError(err)
 	client.Commit()
+
+	// should output nothing: the contract reverts
+	// _, err = instance.TestVerifierProofPointNotOnCurve(auth)
+	// checkError(err)
+	// client.Commit()
+
+	// should output false: ECMUL fails
+	// _, err = instance.TestVerifierProofScalarBiggerThanR(auth)
+	// checkError(err)
+	// client.Commit()
+
+	// should output false: the proof is tampered
+	// _, err = instance.TestVerifierProofWrongPoint(auth)
+	// checkError(err)
+	// client.Commit()
+
+	// should output false: the public inputs are wrong
+	// _, err = instance.TestVerifierProofWrongPublicInput(auth)
+	// checkError(err)
+	// client.Commit()
 
 	// query event
 	query := ethereum.FilterQuery{

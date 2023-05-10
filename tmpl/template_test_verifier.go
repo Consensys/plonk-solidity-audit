@@ -73,41 +73,8 @@ contract TestVerifier {
         uint256 proof_selector_commit_api_commitment_y;
     }
 
-    function get_proof() internal view
-    returns (bytes memory)
-    {
-
-        Proof memory proof;
-
-        proof.proof_l_com_x = {{ (fpptr (index .LRO 0).X ).String }};
-        proof.proof_l_com_y = {{ (fpptr (index .LRO 0).Y ).String }};
-        proof.proof_r_com_x = {{ (fpptr (index .LRO 1).X ).String }};
-        proof.proof_r_com_y = {{ (fpptr (index .LRO 1).Y ).String }};
-        proof.proof_o_com_x = {{ (fpptr (index .LRO 2).X ).String }};
-        proof.proof_o_com_y = {{ (fpptr (index .LRO 2).Y ).String }};
-        proof.proof_h_0_x = {{ (fpptr (index .H 0).X).String }};
-        proof.proof_h_0_y = {{ (fpptr (index .H 0).Y).String }};
-        proof.proof_h_1_x = {{ (fpptr (index .H 1).X).String }};
-        proof.proof_h_1_y = {{ (fpptr (index .H 1).Y).String }};
-        proof.proof_h_2_x = {{ (fpptr (index .H 2).X).String }};
-        proof.proof_h_2_y = {{ (fpptr (index .H 2).Y).String }};
-        proof.proof_l_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 2)).String }};
-        proof.proof_r_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 3)).String }};
-        proof.proof_o_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 4)).String }};
-        proof.proof_s1_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 5)).String }};
-        proof.proof_s2_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 6)).String }};
-        proof.proof_grand_product_commitment_x = {{ (fpptr .Z.X).String }};
-        proof.proof_grand_product_commitment_y = {{ (fpptr .Z.Y).String }};
-        proof.proof_grand_product_at_zeta_omega = {{ (frptr .ZShiftedOpening.ClaimedValue).String }};
-        proof.proof_quotient_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 0)).String }};
-        proof.proof_linearised_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 1)).String }};
-        proof.proof_batch_opening_at_zeta_x = {{ (fpptr .BatchedProof.H.X).String }};
-        proof.proof_batch_opening_at_zeta_y = {{ (fpptr .BatchedProof.H.Y).String }};
-        proof.proof_opening_at_zeta_omega_x = {{ (fpptr .ZShiftedOpening.H.X).String }};
-		proof.proof_opening_at_zeta_omega_y = {{ (fpptr .ZShiftedOpening.H.Y).String }};
-        proof.proof_openings_selector_commit_api_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 7)).String }}   ;
-        proof.proof_selector_commit_api_commitment_x = {{ (fpptr .PI2.X).String }};
-        proof.proof_selector_commit_api_commitment_y = {{ (fpptr .PI2.Y).String }};
+    function encode_proof(Proof memory proof) internal view
+    returns (bytes memory) {
 
         bytes memory res;
         res = abi.encodePacked(
@@ -152,6 +119,176 @@ contract TestVerifier {
         );
 
         return res;
+
+    }
+
+    function get_proof_point_not_on_curve() internal view
+    returns (bytes memory)
+    {
+
+        Proof memory proof;
+
+        // p+1 -> the point (proof.proof_l_com_x, proof.proof_l_com_y) is not on the curve, the verifier reverts
+        proof.proof_l_com_x = 21888242871839275222246405745257275088696311157297823662689037894645226208584;
+        
+        proof.proof_l_com_y = {{ (fpptr (index .LRO 0).Y ).String }};
+        proof.proof_r_com_x = {{ (fpptr (index .LRO 1).X ).String }};
+        proof.proof_r_com_y = {{ (fpptr (index .LRO 1).Y ).String }};
+        proof.proof_o_com_x = {{ (fpptr (index .LRO 2).X ).String }};
+        proof.proof_o_com_y = {{ (fpptr (index .LRO 2).Y ).String }};
+        proof.proof_h_0_x = {{ (fpptr (index .H 0).X).String }};
+        proof.proof_h_0_y = {{ (fpptr (index .H 0).Y).String }};
+        proof.proof_h_1_x = {{ (fpptr (index .H 1).X).String }};
+        proof.proof_h_1_y = {{ (fpptr (index .H 1).Y).String }};
+        proof.proof_h_2_x = {{ (fpptr (index .H 2).X).String }};
+        proof.proof_h_2_y = {{ (fpptr (index .H 2).Y).String }};
+        proof.proof_l_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 2)).String }};
+        proof.proof_r_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 3)).String }};
+        proof.proof_o_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 4)).String }};
+        proof.proof_s1_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 5)).String }};
+        proof.proof_s2_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 6)).String }};
+        proof.proof_grand_product_commitment_x = {{ (fpptr .Z.X).String }};
+        proof.proof_grand_product_commitment_y = {{ (fpptr .Z.Y).String }};
+        proof.proof_grand_product_at_zeta_omega = {{ (frptr .ZShiftedOpening.ClaimedValue).String }};
+        proof.proof_quotient_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 0)).String }};
+        proof.proof_linearised_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 1)).String }};
+        proof.proof_batch_opening_at_zeta_x = {{ (fpptr .BatchedProof.H.X).String }};
+        proof.proof_batch_opening_at_zeta_y = {{ (fpptr .BatchedProof.H.Y).String }};
+        proof.proof_opening_at_zeta_omega_x = {{ (fpptr .ZShiftedOpening.H.X).String }};
+		proof.proof_opening_at_zeta_omega_y = {{ (fpptr .ZShiftedOpening.H.Y).String }};
+        proof.proof_openings_selector_commit_api_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 7)).String }}   ;
+        proof.proof_selector_commit_api_commitment_x = {{ (fpptr .PI2.X).String }};
+        proof.proof_selector_commit_api_commitment_y = {{ (fpptr .PI2.Y).String }};
+
+        bytes memory res = encode_proof(proof);
+        return res;
+    }
+
+    function get_proof_scalar_bigger_than_r() internal view
+    returns (bytes memory)
+    {
+
+        Proof memory proof;
+
+        proof.proof_l_com_x = {{ (fpptr (index .LRO 0).X ).String }};
+        proof.proof_l_com_y = {{ (fpptr (index .LRO 0).Y ).String }};
+        proof.proof_r_com_x = {{ (fpptr (index .LRO 1).X ).String }};
+        proof.proof_r_com_y = {{ (fpptr (index .LRO 1).Y ).String }};
+        proof.proof_o_com_x = {{ (fpptr (index .LRO 2).X ).String }};
+        proof.proof_o_com_y = {{ (fpptr (index .LRO 2).Y ).String }};
+        proof.proof_h_0_x = {{ (fpptr (index .H 0).X).String }};
+        proof.proof_h_0_y = {{ (fpptr (index .H 0).Y).String }};
+        proof.proof_h_1_x = {{ (fpptr (index .H 1).X).String }};
+        proof.proof_h_1_y = {{ (fpptr (index .H 1).Y).String }};
+        proof.proof_h_2_x = {{ (fpptr (index .H 2).X).String }};
+        proof.proof_h_2_y = {{ (fpptr (index .H 2).Y).String }};
+        
+        
+        // r+1: the scalar exceeds r, the contract reverts
+        proof.proof_l_at_zeta = 21888242871839275222246405745257275088548364400416034343698204186575808495618;
+        
+        proof.proof_r_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 3)).String }};
+        proof.proof_o_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 4)).String }};
+        proof.proof_s1_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 5)).String }};
+        proof.proof_s2_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 6)).String }};
+        proof.proof_grand_product_commitment_x = {{ (fpptr .Z.X).String }};
+        proof.proof_grand_product_commitment_y = {{ (fpptr .Z.Y).String }};
+        proof.proof_grand_product_at_zeta_omega = {{ (frptr .ZShiftedOpening.ClaimedValue).String }};
+        proof.proof_quotient_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 0)).String }};
+        proof.proof_linearised_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 1)).String }};
+        proof.proof_batch_opening_at_zeta_x = {{ (fpptr .BatchedProof.H.X).String }};
+        proof.proof_batch_opening_at_zeta_y = {{ (fpptr .BatchedProof.H.Y).String }};
+        proof.proof_opening_at_zeta_omega_x = {{ (fpptr .ZShiftedOpening.H.X).String }};
+		proof.proof_opening_at_zeta_omega_y = {{ (fpptr .ZShiftedOpening.H.Y).String }};
+        proof.proof_openings_selector_commit_api_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 7)).String }};
+        proof.proof_selector_commit_api_commitment_x = {{ (fpptr .PI2.X).String }};
+        proof.proof_selector_commit_api_commitment_y = {{ (fpptr .PI2.Y).String }};
+
+        bytes memory res = encode_proof(proof);
+        return res;
+    }
+
+    // proof.proof_l_com_x,y is on the curve, but does not correspond to the data in the proof
+    function get_proof_wrong_point() internal view
+    returns (bytes memory)
+    {
+
+        Proof memory proof;
+
+        // this point is on the curve, but doesn't belong to the proof
+        proof.proof_l_com_x = 1;
+        proof.proof_l_com_y = 2;
+
+        proof.proof_r_com_x = {{ (fpptr (index .LRO 1).X ).String }};
+        proof.proof_r_com_y = {{ (fpptr (index .LRO 1).Y ).String }};
+        proof.proof_o_com_x = {{ (fpptr (index .LRO 2).X ).String }};
+        proof.proof_o_com_y = {{ (fpptr (index .LRO 2).Y ).String }};
+        proof.proof_h_0_x = {{ (fpptr (index .H 0).X).String }};
+        proof.proof_h_0_y = {{ (fpptr (index .H 0).Y).String }};
+        proof.proof_h_1_x = {{ (fpptr (index .H 1).X).String }};
+        proof.proof_h_1_y = {{ (fpptr (index .H 1).Y).String }};
+        proof.proof_h_2_x = {{ (fpptr (index .H 2).X).String }};
+        proof.proof_h_2_y = {{ (fpptr (index .H 2).Y).String }};
+        proof.proof_l_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 2)).String }};
+        proof.proof_r_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 3)).String }};
+        proof.proof_o_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 4)).String }};
+        proof.proof_s1_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 5)).String }};
+        proof.proof_s2_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 6)).String }};
+        proof.proof_grand_product_commitment_x = {{ (fpptr .Z.X).String }};
+        proof.proof_grand_product_commitment_y = {{ (fpptr .Z.Y).String }};
+        proof.proof_grand_product_at_zeta_omega = {{ (frptr .ZShiftedOpening.ClaimedValue).String }};
+        proof.proof_quotient_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 0)).String }};
+        proof.proof_linearised_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 1)).String }};
+        proof.proof_batch_opening_at_zeta_x = {{ (fpptr .BatchedProof.H.X).String }};
+        proof.proof_batch_opening_at_zeta_y = {{ (fpptr .BatchedProof.H.Y).String }};
+        proof.proof_opening_at_zeta_omega_x = {{ (fpptr .ZShiftedOpening.H.X).String }};
+		proof.proof_opening_at_zeta_omega_y = {{ (fpptr .ZShiftedOpening.H.Y).String }};
+        proof.proof_openings_selector_commit_api_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 7)).String }}   ;
+        proof.proof_selector_commit_api_commitment_x = {{ (fpptr .PI2.X).String }};
+        proof.proof_selector_commit_api_commitment_y = {{ (fpptr .PI2.Y).String }};
+
+        bytes memory res = encode_proof(proof);
+        return res;
+    }
+
+    function get_correct_proof() internal view
+    returns (bytes memory)
+    {
+
+        Proof memory proof;
+
+        proof.proof_l_com_x = {{ (fpptr (index .LRO 0).X ).String }};
+        proof.proof_l_com_y = {{ (fpptr (index .LRO 0).Y ).String }};
+        proof.proof_r_com_x = {{ (fpptr (index .LRO 1).X ).String }};
+        proof.proof_r_com_y = {{ (fpptr (index .LRO 1).Y ).String }};
+        proof.proof_o_com_x = {{ (fpptr (index .LRO 2).X ).String }};
+        proof.proof_o_com_y = {{ (fpptr (index .LRO 2).Y ).String }};
+        proof.proof_h_0_x = {{ (fpptr (index .H 0).X).String }};
+        proof.proof_h_0_y = {{ (fpptr (index .H 0).Y).String }};
+        proof.proof_h_1_x = {{ (fpptr (index .H 1).X).String }};
+        proof.proof_h_1_y = {{ (fpptr (index .H 1).Y).String }};
+        proof.proof_h_2_x = {{ (fpptr (index .H 2).X).String }};
+        proof.proof_h_2_y = {{ (fpptr (index .H 2).Y).String }};
+        proof.proof_l_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 2)).String }};
+        proof.proof_r_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 3)).String }};
+        proof.proof_o_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 4)).String }};
+        proof.proof_s1_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 5)).String }};
+        proof.proof_s2_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 6)).String }};
+        proof.proof_grand_product_commitment_x = {{ (fpptr .Z.X).String }};
+        proof.proof_grand_product_commitment_y = {{ (fpptr .Z.Y).String }};
+        proof.proof_grand_product_at_zeta_omega = {{ (frptr .ZShiftedOpening.ClaimedValue).String }};
+        proof.proof_quotient_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 0)).String }};
+        proof.proof_linearised_polynomial_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 1)).String }};
+        proof.proof_batch_opening_at_zeta_x = {{ (fpptr .BatchedProof.H.X).String }};
+        proof.proof_batch_opening_at_zeta_y = {{ (fpptr .BatchedProof.H.Y).String }};
+        proof.proof_opening_at_zeta_omega_x = {{ (fpptr .ZShiftedOpening.H.X).String }};
+		proof.proof_opening_at_zeta_omega_y = {{ (fpptr .ZShiftedOpening.H.Y).String }};
+        proof.proof_openings_selector_commit_api_at_zeta = {{ (frptr (index .BatchedProof.ClaimedValues 7)).String }}   ;
+        proof.proof_selector_commit_api_commitment_x = {{ (fpptr .PI2.X).String }};
+        proof.proof_selector_commit_api_commitment_y = {{ (fpptr .PI2.Y).String }};
+
+        bytes memory res = encode_proof(proof);
+        return res;
     }
 
     function test_verifier_go(bytes memory proof, uint256[] memory public_inputs) public {
@@ -159,18 +296,70 @@ contract TestVerifier {
         require(check_proof, "verification failed!");
     }
 
-    function test_verifier() public {
+    function test_verifier_correct_proof() public {
 
         uint256[] memory pi = new uint256[]({{ len .Pi }});
         {{ range $index, $element :=  .Pi }}
         pi[{{ $index }}] = {{ (frptr $element).String }};
         {{ end }}
 
-        bytes memory proof = get_proof();
+        bytes memory proof = get_correct_proof();
 
         bool check_proof = PlonkVerifier.Verify(proof, pi);
         emit PrintBool(check_proof);
-        require(check_proof, "verification failed!");
+    }
+
+    function test_verifier_proof_point_not_on_curve() public {
+
+        uint256[] memory pi = new uint256[]({{ len .Pi }});
+        {{ range $index, $element :=  .Pi }}
+        pi[{{ $index }}] = {{ (frptr $element).String }};
+        {{ end }}
+        
+
+        bytes memory proof = get_proof_point_not_on_curve();
+        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        emit PrintBool(check_proof);
+    }
+
+    function test_verifier_proof_scalar_bigger_than_r() public {
+
+        uint256[] memory pi = new uint256[]({{ len .Pi }});
+        {{ range $index, $element :=  .Pi }}
+        pi[{{ $index }}] = {{ (frptr $element).String }};
+        {{ end }}
+        
+
+        bytes memory proof = get_proof_scalar_bigger_than_r();
+        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        emit PrintBool(check_proof);
+    }
+
+    function test_verifier_proof_wrong_point() public {
+
+        uint256[] memory pi = new uint256[]({{ len .Pi }});
+        {{ range $index, $element :=  .Pi }}
+        pi[{{ $index }}] = {{ (frptr $element).String }};
+        {{ end }}
+        
+
+        bytes memory proof = get_proof_wrong_point();
+        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        emit PrintBool(check_proof);
+    }
+
+    function test_verifier_proof_wrong_public_input() public {
+        
+        uint256[] memory pi = new uint256[]({{ len .Pi }});
+        {{ range $index, $element :=  .Pi }}
+        pi[{{ $index }}] = {{ (frptr $element).String }};
+        {{ end }}
+        pi[0] = pi[0] + 1;
+        
+
+        bytes memory proof = get_correct_proof();
+        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        emit PrintBool(check_proof);
     }
 
 }
