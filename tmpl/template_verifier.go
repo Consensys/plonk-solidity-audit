@@ -22,7 +22,7 @@ pragma experimental ABIEncoderV2;
 
 import {Utils} from './Utils.sol';
 
-library PlonkVerifier {
+contract PlonkVerifier {
 
   using Utils for *;
   uint256 constant r_mod = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
@@ -459,7 +459,7 @@ library PlonkVerifier {
     }
 
   function Verify(bytes memory proof, uint256[] memory public_inputs) 
-  internal view returns(bool) {
+  external view returns(bool) {
 
     uint256 gamma;
     uint256 beta;
