@@ -560,7 +560,6 @@ library PlonkVerifier {
 
         let folded_quotients_y := add(folded_quotients, 0x20)
         mstore(folded_quotients_y, sub(p_mod, mload(folded_quotients_y)))
-        mstore(add(state, state_check_var), mload(add(folded_quotients, 0x20)))
 
         mstore(mPtr, mload(folded_digests))
         mstore(add(mPtr, 0x20), mload(add(folded_digests, 0x20)))
@@ -574,11 +573,10 @@ library PlonkVerifier {
         mstore(add(mPtr, 0x120), g2_srs_1_x_1)
         mstore(add(mPtr, 0x140), g2_srs_1_y_0)
         mstore(add(mPtr, 0x160), g2_srs_1_y_1)
-        let l_success := staticcall(sub(gas(), 2000),8,mPtr,0x180,0x00,0x20)
-        // l_success := true
-        mstore(add(state, state_success), and(l_success,mload(add(state, state_success))))
-        // mstore(add(state, state_success), l_success)
-        // mstore(add(state, state_check_var), mload(mPtr))
+        let p_success := staticcall(sub(gas(), 2000),8,mPtr,0x180,0x00,0x20)
+        let s_success := mload(add(state, state_success))
+        s_success := and(and(s_success, p_success), mload(0x00))
+        mstore(add(state, state_success), s_success)
       }
 
       // at this stage the state of mPtr is the same as in compute_gamma
