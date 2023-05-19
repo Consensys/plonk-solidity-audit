@@ -16,15 +16,12 @@ const solidityTestVerifier = `
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.19;
     
 import {PlonkVerifier} from './Verifier.sol';
 
 
-contract TestVerifier {
-
-    using PlonkVerifier for *;
-
+contract TestVerifier is PlonkVerifier {
     event PrintBool(bool a);
 
     struct Proof {
@@ -73,7 +70,7 @@ contract TestVerifier {
         uint256 proof_selector_commit_api_commitment_y;
     }
 
-    function encode_proof(Proof memory proof) internal view
+    function encode_proof(Proof memory proof) internal pure
     returns (bytes memory) {
 
         bytes memory res;
@@ -122,7 +119,7 @@ contract TestVerifier {
 
     }
 
-    function get_proof_point_not_on_curve() internal view
+    function get_proof_point_not_on_curve() internal pure
     returns (bytes memory)
     {
 
@@ -164,7 +161,7 @@ contract TestVerifier {
         return res;
     }
 
-    function get_proof_scalar_bigger_than_r() internal view
+    function get_proof_scalar_bigger_than_r() internal pure
     returns (bytes memory)
     {
 
@@ -209,7 +206,7 @@ contract TestVerifier {
     }
 
     // proof.proof_l_com_x,y is on the curve, but does not correspond to the data in the proof
-    function get_proof_wrong_point() internal view
+    function get_proof_wrong_point() internal pure
     returns (bytes memory)
     {
 
@@ -251,7 +248,7 @@ contract TestVerifier {
         return res;
     }
 
-    function get_correct_proof() internal view
+    function get_correct_proof() internal pure
     returns (bytes memory)
     {
 
@@ -291,12 +288,12 @@ contract TestVerifier {
         return res;
     }
 
-    function test_verifier_go(bytes memory proof, uint256[] memory public_inputs) public {
-        bool check_proof = PlonkVerifier.Verify(proof, public_inputs);
+    function test_verifier_go(bytes memory proof, uint256[] memory public_inputs) external view {
+        bool check_proof = this.Verify(proof, public_inputs);
         require(check_proof, "verification failed!");
     }
 
-    function test_verifier_correct_proof() public {
+    function test_verifier_correct_proof() external {
 
         uint256[] memory pi = new uint256[]({{ len .Pi }});
         {{ range $index, $element :=  .Pi }}
@@ -305,11 +302,11 @@ contract TestVerifier {
 
         bytes memory proof = get_correct_proof();
 
-        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        bool check_proof = this.Verify(proof, pi);
         emit PrintBool(check_proof);
     }
 
-    function test_verifier_proof_point_not_on_curve() public {
+    function test_verifier_proof_point_not_on_curve() external {
 
         uint256[] memory pi = new uint256[]({{ len .Pi }});
         {{ range $index, $element :=  .Pi }}
@@ -318,11 +315,11 @@ contract TestVerifier {
         
 
         bytes memory proof = get_proof_point_not_on_curve();
-        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        bool check_proof = this.Verify(proof, pi);
         emit PrintBool(check_proof);
     }
 
-    function test_verifier_proof_scalar_bigger_than_r() public {
+    function test_verifier_proof_scalar_bigger_than_r() external {
 
         uint256[] memory pi = new uint256[]({{ len .Pi }});
         {{ range $index, $element :=  .Pi }}
@@ -331,11 +328,11 @@ contract TestVerifier {
         
 
         bytes memory proof = get_proof_scalar_bigger_than_r();
-        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        bool check_proof = this.Verify(proof, pi);
         emit PrintBool(check_proof);
     }
 
-    function test_verifier_proof_wrong_point() public {
+    function test_verifier_proof_wrong_point() external {
 
         uint256[] memory pi = new uint256[]({{ len .Pi }});
         {{ range $index, $element :=  .Pi }}
@@ -344,11 +341,11 @@ contract TestVerifier {
         
 
         bytes memory proof = get_proof_wrong_point();
-        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        bool check_proof = this.Verify(proof, pi);
         emit PrintBool(check_proof);
     }
 
-    function test_verifier_proof_wrong_public_input() public {
+    function test_verifier_proof_wrong_external_input() external {
         
         uint256[] memory pi = new uint256[]({{ len .Pi }});
         {{ range $index, $element :=  .Pi }}
@@ -358,7 +355,7 @@ contract TestVerifier {
         
 
         bytes memory proof = get_correct_proof();
-        bool check_proof = PlonkVerifier.Verify(proof, pi);
+        bool check_proof = this.Verify(proof, pi);
         emit PrintBool(check_proof);
     }
 
