@@ -140,14 +140,41 @@ func serialiseProof(proof bn254plonk.Proof) []byte {
 
 	// uint256[] selector_commit_api_at_zeta;
 	// uint256[] wire_committed_commitments;
-	tmp32 = proof.BatchedProof.ClaimedValues[7].Bytes()
-	res = append(res, tmp32[:]...)
-	tmp64 = proof.PI2.RawBytes()
-	res = append(res, tmp64[:]...)
+	for i := 7; i < len(proof.BatchedProof.ClaimedValues); i++ {
+		tmp32 = proof.BatchedProof.ClaimedValues[i].Bytes()
+		res = append(res, tmp32[:]...)
+	}
+	for i := 0; i < len(proof.Bsb22Commitments); i++ {
+		tmp64 = proof.Bsb22Commitments[i].RawBytes()
+		res = append(res, tmp64[:]...)
+	}
 
 	return res
 }
 
+// with t₁ = t₂ = 1
+// (ζⁿ-1)H(ζ)
+// s₁
+// s₂
+// where id_{1} = id, id_{2} = vk_coset_shift*id, id_{3} = vk_coset_shift²*id
+//
+//	L(ζ)*Qₗ+r(ζ)*Qᵣ+R(ζ)L(ζ)*Qₘ+oOζ)*Qₒ+Qₖ+Σᵢqc'ᵢ(ζ)*BsbCommitmentᵢ +
+//	α*( Z(μζ)(L(ζ)+β*S₁(ζ)+γ)*(R(ζ)+β*S₂(ζ)+γ)*S₃(X)-Z(X)(L(ζ)+β*id_{1}(ζ)+γ)*(R(ζ)+β*id_{2(ζ)+γ)*(O(ζ)+β*id_{3}(ζ)+γ) ) +
+//	α²*L₁(ζ)*Z
+//
+// γⁱ
+// H(ζ) + γLinearised_polynomial(ζ)+γ²L(ζ) + γ³R(ζ)+ γ⁴O(ζ) + γ⁵S₁(ζ) +γ⁶S₂(ζ) + ∑ᵢγ⁶⁺ⁱPi_{i}(ζ)
+// [H] + γ[Linearised_polynomial]+γ²[L] + γ³[R] + γ⁴[O] + γ⁵[S₁] +γ⁶[S₂] + ∑ᵢγ⁶⁺ⁱ[Pi_{i}]
+// Pi_{i}
+// S₁ S₂
+// H₁ H₂ H₃
+// γ
+// α² * 1/n * (ζ{n}-1)/(ζ - 1)
+// (the aᵢ are on 32 bytes)
+// a₂
+// Ex: if ins = [a₀, a₁, a₃] it returns [a₀^{-1},a₁^{-1}, a₂^{-1}]
+// ℤ
+// ωⁱ/n * (ζⁿ-1)/(ζ-ωⁱ)
 func main() {
 
 	// create account
@@ -170,7 +197,7 @@ func main() {
 	checkError(err)
 
 	// should output true: proof and public in puts are correct
-	_, err = instance.TestVerifierCorrectProof(auth)
+	_, err = instance.TestVerifier(auth)
 	checkError(err)
 	client.Commit()
 

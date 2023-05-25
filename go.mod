@@ -16,8 +16,8 @@ require (
 	github.com/cockroachdb/pebble v0.0.0-20230209160836-829675f94811 // indirect
 	github.com/cockroachdb/redact v1.1.3 // indirect
 	github.com/consensys/bavard v0.1.13 // indirect
-	github.com/consensys/gnark v0.7.2-0.20230504221325-b7a81f31e2c8 // indirect
-	github.com/consensys/gnark-crypto v0.11.0 // indirect
+	github.com/consensys/gnark v0.7.2-0.20230524182320-52df4cfd203e // indirect
+	github.com/consensys/gnark-crypto v0.11.1-0.20230508024855-0cd4994b7f0b // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deckarep/golang-set/v2 v2.1.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect

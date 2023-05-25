@@ -28,6 +28,9 @@ func GenerateVerifier(vk bn254plonk.VerifyingKey, proof bn254plonk.Proof, pi []f
 		"fpptr": func(x fp.Element) *fp.Element {
 			return &x
 		},
+		"add": func(i, j int) int {
+			return i + j
+		},
 	}
 
 	tf := template.New("t").Funcs(funcMap)
