@@ -10,6 +10,8 @@ import (
 	bn254plonk "github.com/consensys/gnark/backend/plonk/bn254"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/scs"
+	fiatshamir "github.com/consensys/gnark/std/fiat-shamir"
+	"github.com/consensys/gnark/std/hash/mimc"
 	"github.com/consensys/gnark/test"
 	"github.com/consensys/plonk-solidity/tmpl"
 )
@@ -22,27 +24,75 @@ func checkError(err error) {
 }
 
 // ------------------------------------------
-// no commitment
-type noCommitmentCircuit struct {
-	X frontend.Variable
-	Y frontend.Variable `gnark:",public"`
+// school book Fiat Shamir
+type SbFiatShamir struct {
+	X [10]frontend.Variable
+	Y [10]frontend.Variable `gnark:",public"`
 }
 
-func (c *noCommitmentCircuit) Define(api frontend.API) error {
-	a := api.Mul(c.X, c.X, c.X, c.X)
-	api.AssertIsEqual(a, c.Y)
+// The circuit generates a sequence of values from its private inputs X.
+// Namely it adds 1 to every private inputs, the resulting set of values is stored
+// in vals. The goal of the circuit is to ensure
+// that the values in vals appear exactly once in the list of the given public values.
+// For instance if Y = [3,4,5,6,7,8,9,10,11,12] then the circuit ensures that vals contains
+// exactly one of each value in Y.
+// To do that, we check the following identity:
+// Π_{i<10}(Yᵢ-x) ==? Π_{i<10}(Xᵢ-x) where x is derived using Fiat Shamir with hash.
+func (c *SbFiatShamir) Define(api frontend.API) error {
+
+	// 1 - generate the values vals (here we add 1 to the private inputs to
+	// simulate a real operation but it could be anything)
+	vals := make([]frontend.Variable, 10)
+	for i := 0; i < len(c.X); i++ {
+		vals[i] = api.Add(c.X[i], 1)
+	}
+
+	// 2 - generate the challenge using Fiat Shamir + mimc
+	h, err := mimc.NewMiMC(api)
+	if err != nil {
+		return err
+	}
+	tsSnark := fiatshamir.NewTranscript(api, &h, "x")
+	if err := tsSnark.Bind("x", vals[:]); err != nil {
+		return err
+	}
+	if err := tsSnark.Bind("x", c.Y[:]); err != nil {
+		return err
+	}
+	x, err := tsSnark.ComputeChallenge("x")
+	if err != nil {
+		return err
+	}
+
+	// 3 - compute both products Π_{i<10}(Yᵢ-x) and Π_{i<10}(Xᵢ-x)
+	var rhs, lhs, tmp frontend.Variable
+	rhs = 1
+	lhs = 1
+	for i := 0; i < len(vals); i++ {
+
+		tmp = api.Sub(x, vals[i])
+		lhs = api.Mul(lhs, tmp)
+
+		tmp = api.Sub(x, c.Y[i])
+		rhs = api.Mul(rhs, tmp)
+	}
+
+	api.AssertIsEqual(rhs, lhs)
+
 	return nil
 }
 
-func getVkProofnoCommitmentCircuit() (bn254plonk.Proof, bn254plonk.VerifyingKey, []fr.Element) {
+func getVkProofSbFiatShamir() (bn254plonk.Proof, bn254plonk.VerifyingKey, []fr.Element) {
 
-	var circuit noCommitmentCircuit
+	var circuit SbFiatShamir
 	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), scs.NewBuilder, &circuit)
 	checkError(err)
 
-	var witness noCommitmentCircuit
-	witness.X = 2
-	witness.Y = 16
+	var witness SbFiatShamir
+	for i := 0; i < len(witness.X); i++ {
+		witness.X[i] = i + 9 // the circuit adds 1 to the X's, and checks that the X's appear exactly once in Y
+		witness.Y[i] = i + 10
+	}
 	witnessFull, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	checkError(err)
 	witnessPublic, err := witnessFull.Public()
@@ -70,40 +120,71 @@ func getVkProofnoCommitmentCircuit() (bn254plonk.Proof, bn254plonk.VerifyingKey,
 }
 
 // ------------------------------------------
-// single commitment
-type singleCommitmentCircuit struct {
-	Public [3]frontend.Variable `gnark:",public"`
-	X      [3]frontend.Variable
+// Fiat Shamir using commitment
+type ComFiatShamir struct {
+	X [10]frontend.Variable
+	Y [10]frontend.Variable `gnark:",public"`
 }
 
-func (c *singleCommitmentCircuit) Define(api frontend.API) error {
+// The circuit generates a sequence of values from its private inputs X.
+// Namely it adds 1 to every private inputs, the resulting set of values is stored
+// in vals. The goal of the circuit is to ensure
+// that the values in vals appear exactly once in the list of the given public values.
+// For instance if Y = [3,4,5,6,7,8,9,10,11,12] then the circuit ensures that vals contains
+// exactly one of each value in Y.
+// To do that, we check the following identity:
+// Π_{i<10}(Yᵢ-x) ==? Π_{i<10}(Xᵢ-x) where x is derived using Fiat Shamir with hash.
+func (c *ComFiatShamir) Define(api frontend.API) error {
 
+	// 1 - generate the values vals (here we add 1 to the private inputs to
+	// simulate a real operation but it could be anything)
+	vals := make([]frontend.Variable, 10)
+	for i := 0; i < len(c.X); i++ {
+		vals[i] = api.Add(c.X[i], 1)
+	}
+
+	// 2 - generate the challenge using Commit api
 	committer, ok := api.(frontend.Committer)
 	if !ok {
 		return fmt.Errorf("type %T doesn't impl the Committer interface", api)
 	}
-	commitment, err := committer.Commit(c.X[:]...)
+	args := make([]frontend.Variable, len(c.X)+len(vals))
+	copy(args, vals[:])
+	copy(args[len(vals):], c.Y[:])
+	x, err := committer.Commit(args)
 	if err != nil {
 		return err
 	}
-	for i := 0; i < 3; i++ {
-		api.AssertIsDifferent(commitment, c.X[i])
-		for _, p := range c.Public {
-			api.AssertIsDifferent(p, 0)
-		}
+
+	// 3 - compute both products Π_{i<10}(Yᵢ-x) and Π_{i<10}(Xᵢ-x)
+	var rhs, lhs, tmp frontend.Variable
+	rhs = 1
+	lhs = 1
+	for i := 0; i < len(vals); i++ {
+
+		tmp = api.Sub(x, vals[i])
+		lhs = api.Mul(lhs, tmp)
+
+		tmp = api.Sub(x, c.Y[i])
+		rhs = api.Mul(rhs, tmp)
 	}
-	return err
+
+	api.AssertIsEqual(rhs, lhs)
+
+	return nil
 }
 
-func getVkProofsingleCommitmentCircuit() (bn254plonk.Proof, bn254plonk.VerifyingKey, []fr.Element) {
+func getVkProofComFiatShamir() (bn254plonk.Proof, bn254plonk.VerifyingKey, []fr.Element) {
 
-	var circuit singleCommitmentCircuit
+	var circuit ComFiatShamir
 	ccs, err := frontend.Compile(ecc.BN254.ScalarField(), scs.NewBuilder, &circuit)
 	checkError(err)
 
-	var witness singleCommitmentCircuit
-	witness.X = [3]frontend.Variable{3, 4, 5}
-	witness.Public = [3]frontend.Variable{6, 7, 8}
+	var witness ComFiatShamir
+	for i := 0; i < len(witness.X); i++ {
+		witness.X[i] = i + 9 // the circuit adds 1 to the X's, and checks that the X's appear exactly once in Y
+		witness.Y[i] = i + 10
+	}
 	witnessFull, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	checkError(err)
 	witnessPublic, err := witnessFull.Public()
@@ -205,8 +286,8 @@ func getVkProofmultipleCommitmentCircuit() (bn254plonk.Proof, bn254plonk.Verifyi
 //go:generate go run main.go
 func main() {
 
-	// proof, vk, pi := getVkProofsingleCommitmentCircuit()
-	proof, vk, pi := getVkProofsingleCommitmentCircuit()
+	proof, vk, pi := getVkProofComFiatShamir()
+	// proof, vk, pi := getVkProofSbFiatShamir()
 
 	err := tmpl.GenerateVerifier(vk, proof, pi, "../contracts")
 	checkError(err)
